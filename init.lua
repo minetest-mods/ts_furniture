@@ -1,4 +1,6 @@
-function register_ts_furniture(mod, name, description, texture)
+ts_furniture = {}
+
+function ts_furniture.register_furniture(mod, name, description, texture)
 	local groups = minetest.registered_nodes[mod .. ":" ..name].groups
 	local furniture_groups = {}
 	for k,v in pairs(groups) do
@@ -140,8 +142,8 @@ function register_ts_furniture(mod, name, description, texture)
 	})
 end
 
-register_ts_furniture("default", "aspen_wood" , "Aspen"      , "default_aspen_wood.png" )
-register_ts_furniture("default", "pine_wood"  , "Pine"       , "default_pine_wood.png"  )
-register_ts_furniture("default", "acacia_wood", "Acacia"     , "default_acacia_wood.png")
-register_ts_furniture("default", "wood"       , "Wooden"     , "default_wood.png"       )
-register_ts_furniture("default", "junglewood" , "Jungle Wood", "default_junglewood.png" )
+ts_furniture.register_furniture("default", "aspen_wood" , "Aspen"      , "default_aspen_wood.png" )
+ts_furniture.register_furniture("default", "pine_wood"  , "Pine"       , "default_pine_wood.png"  )
+ts_furniture.register_furniture("default", "acacia_wood", "Acacia"     , "default_acacia_wood.png")
+ts_furniture.register_furniture("default", "wood"       , "Wooden"     , "default_wood.png"       )
+ts_furniture.register_furniture("default", "junglewood" , "Jungle Wood", "default_junglewood.png" )
