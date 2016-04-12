@@ -1,8 +1,49 @@
 ts_furniture = {}
 
+-- If true, you can sit on chairs and benches, when right-click them.
+ts_furniture.enable_sitting = true
+
+-- The following code is from "Get Comfortable [cozy]" (by everamzah; published under WTFPL).
+-- Thomas S. modified it, so that it can be used in this mod
+minetest.register_globalstep(function(dtime)
+        local players = minetest.get_connected_players()
+        for i=1, #players do
+                local name = players[i]:get_player_name()
+                if default.player_attached[name] and not players[i]:get_attach() and
+                                (players[i]:get_player_control().up == true or
+                                players[i]:get_player_control().down == true or
+                                players[i]:get_player_control().left == true or
+                                players[i]:get_player_control().right == true or
+                                players[i]:get_player_control().jump == true) then
+                        players[i]:set_eye_offset({x=0, y=0, z=0}, {x=0, y=0, z=0})
+                        players[i]:set_physics_override(1, 1, 1)
+                        default.player_attached[name] = false
+                        default.player_set_animation(players[i], "stand", 30)
+                end
+        end
+end)
+
+ts_furniture.sit = function(name, pos)
+	local player = minetest.get_player_by_name(name)
+	if default.player_attached[name] then
+		player:set_eye_offset({x=0, y=0, z=0}, {x=0, y=0, z=0})
+		player:set_physics_override(1, 1, 1)
+		default.player_attached[name] = false
+		default.player_set_animation(player, "stand", 30)
+	else
+		player:moveto(pos)
+		player:set_eye_offset({x=0, y=-7, z=2}, {x=0, y=0, z=0})
+		player:set_physics_override(0, 0, 0)
+		default.player_attached[name] = true
+		default.player_set_animation(player, "sit", 30)
+	end
+end
+-- end of cozy-code
+
 local furnitures = {
 	["chair"] = {
 		description = "Chair",
+		sitting = true,
 		nodebox = {
 			{-0.3,-0.5, 0.2, -0.2, 0.5, 0.3}, -- foot 1
 			{ 0.2,-0.5, 0.2,  0.3, 0.5, 0.3}, -- foot 2
@@ -72,6 +113,7 @@ local furnitures = {
 
 	["bench"] = {
 		description = "Bench",
+		sitting = true,
 		nodebox = {
 			{-0.5, -0.1, 0,  0.5, 0  , 0.5}, -- seating
 			{-0.4, -0.5, 0, -0.3,-0.1, 0.5}, -- foot 1
@@ -118,7 +160,12 @@ function ts_furniture.register_furniture(recipe, description, texture)
 			node_box = {
 				type = "fixed",
 				fixed = def.nodebox
-			}
+			},
+			on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+				if def.sitting and ts_furniture.enable_sitting then
+					ts_furniture.sit(player:get_player_name(), pos)
+				end
+			end
 		})
 
 		minetest.register_craft({
