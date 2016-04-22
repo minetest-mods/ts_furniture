@@ -3,6 +3,7 @@ ts_furniture = {}
 -- If true, you can sit on chairs and benches, when right-click them.
 ts_furniture.enable_sitting = true
 
+
 -- The following code is from "Get Comfortable [cozy]" (by everamzah; published under WTFPL).
 -- Thomas S. modified it, so that it can be used in this mod
 minetest.register_globalstep(function(dtime)
@@ -180,3 +181,16 @@ ts_furniture.register_furniture("default:pine_wood"  , "Pine"       , "default_p
 ts_furniture.register_furniture("default:acacia_wood", "Acacia"     , "default_acacia_wood.png")
 ts_furniture.register_furniture("default:wood"       , "Wooden"     , "default_wood.png"       )
 ts_furniture.register_furniture("default:junglewood" , "Jungle Wood", "default_junglewood.png" )
+
+if(minetest.get_modpath("moretrees")) then
+	ts_furniture.register_furniture("moretrees:apple_tree_planks", "Apple Tree", "moretrees_apple_tree_wood.png")
+	ts_furniture.register_furniture("moretrees:beech_planks", "Beech", "moretrees_beech_wood.png")
+	ts_furniture.register_furniture("moretrees:birch_planks", "Birch", "moretrees_birch_wood.png")
+	ts_furniture.register_furniture("moretrees:fir_planks", "Fir", "moretrees_fir_wood.png")
+	ts_furniture.register_furniture("moretrees:oak_planks", "Oak", "moretrees_oak_wood.png")
+	ts_furniture.register_furniture("moretrees:palm_planks", "Palm", "moretrees_palm_wood.png")
+	ts_furniture.register_furniture("moretrees:rubber_tree_planks", "Rubber Tree", "moretrees_rubber_tree_wood.png")
+	ts_furniture.register_furniture("moretrees:sequoia_planks", "Sequoia", "moretrees_sequoia_wood.png")
+	ts_furniture.register_furniture("moretrees:spruce_planks", "Spruce", "moretrees_spruce_wood.png")
+	ts_furniture.register_furniture("moretrees:willow_planks", "Willow", "moretrees_willow_wood.png")
+end
