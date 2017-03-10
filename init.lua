@@ -55,7 +55,7 @@ local furnitures = {
 		},
 		craft = function(recipe)
 			return {
-				{ "group:stick", "" },
+				{ "", "group:stick" },
 				{ recipe, recipe },
 				{ "group:stick", "group:stick" }
 			}
