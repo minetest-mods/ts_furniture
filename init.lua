@@ -35,7 +35,7 @@ ts_furniture.sit = function(name, pos)
         -- local player_model_version = minetest.settings:get("player_model_version")
         -- if player_model_version == "default_character_v2" then
         -- next line may make player underground in versions < 0.5.0-dev
-        pos.y = pos.y - 0.5
+        pos.y = pos.y - 0.7
         -- end
         player:moveto(pos)
         player:set_eye_offset({ x = 0, y = -7, z = 2 }, { x = 0, y = 0, z = 0 })
