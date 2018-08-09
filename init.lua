@@ -45,7 +45,6 @@ ts_furniture.sit = function(name, pos)
 		default.player_set_animation(player, "stand", 30)
 	else
 		if player_model_version == "default_character_v3" then
-			-- next line may make player underground in versions < 0.5.0-dev
 			pos.y = pos.y - 0.6
 		end
 		player:moveto(pos)
