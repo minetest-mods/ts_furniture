@@ -193,3 +193,16 @@ if (minetest.get_modpath("moretrees")) then
 	ts_furniture.register_furniture("moretrees:spruce_planks", "Spruce", "moretrees_spruce_wood.png")
 	ts_furniture.register_furniture("moretrees:willow_planks", "Willow", "moretrees_willow_wood.png")
 end
+
+if minetest.get_modpath("ethereal") then
+	ts_furniture.register_furniture("ethereal:banana_wood", "Banana", "banana_wood.png")
+	ts_furniture.register_furniture("ethereal:birch_wood", "Birch", "moretrees_birch_wood.png")
+	ts_furniture.register_furniture("ethereal:frost_wood", "Frost", "frost_wood.png")
+	ts_furniture.register_furniture("ethereal:mushroom_trunk", "Mushroom", "mushroom_trunk.png")
+	ts_furniture.register_furniture("ethereal:palm_wood", "Palm", "moretrees_palm_wood.png")
+	ts_furniture.register_furniture("ethereal:redwood_wood", "Redwood", "redwood_wood.png")
+	ts_furniture.register_furniture("ethereal:sakura_wood", "Sakura", "ethereal_sakura_wood.png")
+	ts_furniture.register_furniture("ethereal:scorched_tree", "Scorched", "scorched_tree.png")
+	ts_furniture.register_furniture("ethereal:willow_wood", "Willow", "willow_wood.png")
+	ts_furniture.register_furniture("ethereal:yellow_wood", "Healing Tree", "yellow_wood.png")
+end
