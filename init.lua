@@ -1,5 +1,9 @@
 ts_furniture = {}
 
+--- Used for localization
+
+local S = minetest.get_translator("ts_furniture")
+
 -- If true, you can sit on chairs and benches, when right-click them.
 ts_furniture.enable_sitting = true
 
@@ -42,7 +46,7 @@ end
 
 local furnitures = {
 	["chair"] = {
-		description = "Chair",
+		description = S("Chair"),
 		sitting = true,
 		nodebox = {
 			{ -0.3, -0.5, 0.2, -0.2, 0.5, 0.3 }, -- foot 1
@@ -61,7 +65,7 @@ local furnitures = {
 		end
 	},
 	["table"] = {
-		description = "Table",
+		description = S("Table"),
 		nodebox = {
 			{ -0.4, -0.5, -0.4, -0.3, 0.4, -0.3 }, -- foot 1
 			{ 0.3, -0.5, -0.4, 0.4, 0.4, -0.3 }, -- foot 2
@@ -78,7 +82,7 @@ local furnitures = {
 		end
 	},
 	["small_table"] = {
-		description = "Small Table",
+		description = S("Small Table"),
 		nodebox = {
 			{ -0.4, -0.5, -0.4, -0.3, 0.1, -0.3 }, -- foot 1
 			{ 0.3, -0.5, -0.4, 0.4, 0.1, -0.3 }, -- foot 2
@@ -94,7 +98,7 @@ local furnitures = {
 		end
 	},
 	["tiny_table"] = {
-		description = "Tiny Table",
+		description = S("Tiny Table"),
 		nodebox = {
 			{ -0.5, -0.1, -0.5, 0.5, 0, 0.5 }, -- table top
 			{ -0.4, -0.5, -0.5, -0.3, -0.1, 0.5 }, -- foot 1
@@ -108,7 +112,7 @@ local furnitures = {
 		end
 	},
 	["bench"] = {
-		description = "Bench",
+		description = S("Bench"),
 		sitting = true,
 		nodebox = {
 			{ -0.5, -0.1, 0, 0.5, 0, 0.5 }, -- seating
@@ -175,34 +179,34 @@ function ts_furniture.register_furniture(recipe, description, texture)
 	end
 end
 
-ts_furniture.register_furniture("default:aspen_wood", "Aspen", "default_aspen_wood.png")
-ts_furniture.register_furniture("default:pine_wood", "Pine", "default_pine_wood.png")
-ts_furniture.register_furniture("default:acacia_wood", "Acacia", "default_acacia_wood.png")
-ts_furniture.register_furniture("default:wood", "Wooden", "default_wood.png")
-ts_furniture.register_furniture("default:junglewood", "Jungle Wood", "default_junglewood.png")
+ts_furniture.register_furniture("default:aspen_wood", S("Aspen"), "default_aspen_wood.png")
+ts_furniture.register_furniture("default:pine_wood", S("Pine"), "default_pine_wood.png")
+ts_furniture.register_furniture("default:acacia_wood", S("Acacia"), "default_acacia_wood.png")
+ts_furniture.register_furniture("default:wood", S("Wooden"), "default_wood.png")
+ts_furniture.register_furniture("default:junglewood", S("Jungle Wood"), "default_junglewood.png")
 
 if (minetest.get_modpath("moretrees")) then
-	ts_furniture.register_furniture("moretrees:apple_tree_planks", "Apple Tree", "moretrees_apple_tree_wood.png")
-	ts_furniture.register_furniture("moretrees:beech_planks", "Beech", "moretrees_beech_wood.png")
-	ts_furniture.register_furniture("moretrees:birch_planks", "Birch", "moretrees_birch_wood.png")
-	ts_furniture.register_furniture("moretrees:fir_planks", "Fir", "moretrees_fir_wood.png")
-	ts_furniture.register_furniture("moretrees:oak_planks", "Oak", "moretrees_oak_wood.png")
-	ts_furniture.register_furniture("moretrees:palm_planks", "Palm", "moretrees_palm_wood.png")
-	ts_furniture.register_furniture("moretrees:rubber_tree_planks", "Rubber Tree", "moretrees_rubber_tree_wood.png")
-	ts_furniture.register_furniture("moretrees:sequoia_planks", "Sequoia", "moretrees_sequoia_wood.png")
-	ts_furniture.register_furniture("moretrees:spruce_planks", "Spruce", "moretrees_spruce_wood.png")
-	ts_furniture.register_furniture("moretrees:willow_planks", "Willow", "moretrees_willow_wood.png")
+	ts_furniture.register_furniture("moretrees:apple_tree_planks", S("Apple Tree"), "moretrees_apple_tree_wood.png")
+	ts_furniture.register_furniture("moretrees:beech_planks", S("Beech"), "moretrees_beech_wood.png")
+	ts_furniture.register_furniture("moretrees:birch_planks", S("Birch"), "moretrees_birch_wood.png")
+	ts_furniture.register_furniture("moretrees:fir_planks", S("Fir"), "moretrees_fir_wood.png")
+	ts_furniture.register_furniture("moretrees:oak_planks", S("Oak"), "moretrees_oak_wood.png")
+	ts_furniture.register_furniture("moretrees:palm_planks", S("Palm"), "moretrees_palm_wood.png")
+	ts_furniture.register_furniture("moretrees:rubber_tree_planks", S("Rubber Tree"), "moretrees_rubber_tree_wood.png")
+	ts_furniture.register_furniture("moretrees:sequoia_planks", S("Sequoia"), "moretrees_sequoia_wood.png")
+	ts_furniture.register_furniture("moretrees:spruce_planks", S("Spruce"), "moretrees_spruce_wood.png")
+	ts_furniture.register_furniture("moretrees:willow_planks", S("Willow"), "moretrees_willow_wood.png")
 end
 
 if minetest.get_modpath("ethereal") then
-	ts_furniture.register_furniture("ethereal:banana_wood", "Banana", "banana_wood.png")
-	ts_furniture.register_furniture("ethereal:birch_wood", "Birch", "moretrees_birch_wood.png")
-	ts_furniture.register_furniture("ethereal:frost_wood", "Frost", "frost_wood.png")
-	ts_furniture.register_furniture("ethereal:mushroom_trunk", "Mushroom", "mushroom_trunk.png")
-	ts_furniture.register_furniture("ethereal:palm_wood", "Palm", "moretrees_palm_wood.png")
-	ts_furniture.register_furniture("ethereal:redwood_wood", "Redwood", "redwood_wood.png")
-	ts_furniture.register_furniture("ethereal:sakura_wood", "Sakura", "ethereal_sakura_wood.png")
-	ts_furniture.register_furniture("ethereal:scorched_tree", "Scorched", "scorched_tree.png")
-	ts_furniture.register_furniture("ethereal:willow_wood", "Willow", "willow_wood.png")
-	ts_furniture.register_furniture("ethereal:yellow_wood", "Healing Tree", "yellow_wood.png")
+	ts_furniture.register_furniture("ethereal:banana_wood", S("Banana"), "banana_wood.png")
+	ts_furniture.register_furniture("ethereal:birch_wood", S("Birch"), "moretrees_birch_wood.png")
+	ts_furniture.register_furniture("ethereal:frost_wood", S("Frost"), "frost_wood.png")
+	ts_furniture.register_furniture("ethereal:mushroom_trunk", S("Mushroom"), "mushroom_trunk.png")
+	ts_furniture.register_furniture("ethereal:palm_wood", S("Palm"), "moretrees_palm_wood.png")
+	ts_furniture.register_furniture("ethereal:redwood_wood", S("Redwood"), "redwood_wood.png")
+	ts_furniture.register_furniture("ethereal:sakura_wood", S("Sakura"), "ethereal_sakura_wood.png")
+	ts_furniture.register_furniture("ethereal:scorched_tree", S("Scorched"), "scorched_tree.png")
+	ts_furniture.register_furniture("ethereal:willow_wood", S("Willow"), "willow_wood.png")
+	ts_furniture.register_furniture("ethereal:yellow_wood", S("Healing Tree"), "yellow_wood.png")
 end
