@@ -3,6 +3,9 @@ ts_furniture = {}
 -- If true, you can sit on chairs and benches, when right-click them.
 ts_furniture.enable_sitting = minetest.settings:get_bool("ts_furniture.enable_sitting", true)
 
+-- Used for localization
+local S = minetest.get_translator("ts_furniture")
+
 if ts_furniture.enable_sitting then
     -- The following code is from "Get Comfortable [cozy]" (by everamzah; published under WTFPL).
     -- Thomas S. modified it, so that it can be used in this mod
@@ -156,7 +159,7 @@ function ts_furniture.register_furniture(recipe, description, texture)
 		end
 
 		minetest.register_node(":" .. node_name, {
-			description = description .. " " .. def.description,
+			description = S(description .. " " .. def.description),
 			drawtype = "nodebox",
 			paramtype = "light",
 			paramtype2 = "facedir",
