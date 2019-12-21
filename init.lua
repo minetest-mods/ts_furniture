@@ -6,7 +6,7 @@ ts_furniture.enable_sitting = minetest.settings:get_bool("ts_furniture.enable_si
 -- Used for localization
 local S = minetest.get_translator("ts_furniture")
 
-if ts_furniture.enable_sitting then
+if ts_furniture.enable_sitting and not minetest.get_modpath('cozy') then
     -- The following code is from "Get Comfortable [cozy]" (by everamzah; published under WTFPL).
     -- Thomas S. modified it, so that it can be used in this mod
     minetest.register_globalstep(function(dtime)
