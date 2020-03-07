@@ -13,6 +13,9 @@ if ts_furniture.enable_sitting then
 	ts_furniture.sit = function(pos, _, player)
 		local name = player:get_player_name()
 		if not player_api.player_attached[name] then
+			if vector.length(player:get_player_velocity()) > 0 then
+				return
+			end
 			player:move_to(pos)
 			player:set_eye_offset({x = 0, y = -7, z = 2}, {x = 0, y = 0, z = 0})
 			player:set_physics_override(0, 0, 0)
@@ -144,7 +147,7 @@ local ignore_groups = {
 	["stone"] = true
 }
 
-function ts_furniture.register_furniture(recipe, description, texture)
+function ts_furniture.register_furniture(recipe, description, tiles)
 	local recipe_def = minetest.registered_items[recipe]
 	if not recipe_def then
 		return
@@ -171,7 +174,7 @@ function ts_furniture.register_furniture(recipe, description, texture)
 			paramtype = "light",
 			paramtype2 = "facedir",
 			sunlight_propagates = true,
-			tiles = { texture },
+			tiles = { tiles },
 			groups = groups,
 			node_box = {
 				type = "fixed",
