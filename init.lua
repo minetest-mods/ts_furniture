@@ -20,7 +20,11 @@ if ts_furniture.enable_sitting then
 			player:set_eye_offset({x = 0, y = -7, z = 2}, {x = 0, y = 0, z = 0})
 			player:set_physics_override(0, 0, 0)
 			player_api.player_attached[name] = true
-			player_api.set_animation(player, "sit", 30)
+			minetest.after(0.1, function()
+				if player then
+					player_api.set_animation(player, "sit" , 30)
+				end
+			end)
 		else
 			ts_furniture.stand(player, name)
 		end
