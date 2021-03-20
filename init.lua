@@ -3,6 +3,7 @@ ts_furniture = {}
 -- If true, you can sit on chairs and benches, when right-click them.
 ts_furniture.enable_sitting = minetest.settings:get_bool("ts_furniture.enable_sitting", true)
 ts_furniture.globalstep = minetest.settings:get_bool("ts_furniture.globalstep", true)
+ts_furniture.kneeling_bench = minetest.settings:get_bool("ts_furniture.kneeling_bench", false)
 
 -- Used for localization
 local S = minetest.get_translator("ts_furniture")
@@ -146,6 +147,26 @@ local furnitures = {
 		end
 	}
 }
+
+if ts_furniture.kneeling_bench then
+	furnitures.kneeling_bench = {
+		description = "Kneeling Bench",
+		nodebox = {
+			{ -0.5, -0.5, 0.4, 0.5, 0.5, 0.5 },
+			{ -0.4, -0.5, -0.2, -0.3, -0.3, 0.5 },
+			{ 0.3, -0.5, -0.2, 0.4, -0.3, 0.5 },
+			{ -0.5, -0.3, -0.2, 0.5, -0.2, 0.2},
+			{ -0.5, 0.4, 0.15, 0.5, 0.5, 0.55},
+		},
+		craft = function(recipe)
+			local bench_name = "ts_furniture:" .. recipe:gsub(":", "_") .. "_bench"
+			return {
+				{ recipe, "" },
+				{ recipe, bench_name }
+			}
+		end
+	}
+end
 
 local ignore_groups = {
 	["wood"] = true,
