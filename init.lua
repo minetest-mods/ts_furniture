@@ -31,19 +31,20 @@ if ts_furniture.enable_sitting then
 			minetest.chat_send_player(player:get_player_name(), "You cannot sit while attached to something.")
 			return
 		end
-		local name = player:get_player_name()
-		if player_api.player_attached[name] then
-			ts_furniture.stand(player, name)
+		local player_name = player:get_player_name()
+		if player_api.player_attached[player_name] then
+			ts_furniture.stand(player, player_name)
 		else
-			if vector.length(player:get_player_velocity()) > 0 then
-				minetest.chat_send_player(player:get_player_name(), 'You can only sit down when you are not moving.')
+			if player:get_velocity():length() > 0 then
+				minetest.chat_send_player(player_name, 'You can only sit down when you are not moving.')
 				return
 			end
 			player:move_to(pos)
 			player:set_eye_offset({x = 0, y = -7, z = 2}, {x = 0, y = 0, z = 0})
 			player:set_physics_override(0, 0, 0)
-			player_api.player_attached[name] = true
+			player_api.player_attached[player_name] = true
 			minetest.after(0.1, function()
+				player = minetest.get_player_by_name(player_name)
 				if player then
 					player_api.set_animation(player, "sit" , 30)
 				end
@@ -52,9 +53,9 @@ if ts_furniture.enable_sitting then
 	end
 
 	ts_furniture.up = function(_, _, player)
-		local name = player:get_player_name()
-		if player_api.player_attached[name] then
-			ts_furniture.stand(player, name)
+		local player_name = player:get_player_name()
+		if player_api.player_attached[player_name] then
+			ts_furniture.stand(player, player_name)
 		end
 	end
 
