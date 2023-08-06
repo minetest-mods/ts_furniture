@@ -69,7 +69,7 @@ if ts_furniture.enable_sitting then
 				local player = players[i]
 				local name = player:get_player_name()
 				local ctrl = player:get_player_control()
-				if default.player_attached[name] and not player:get_attach() and
+				if player_api.player_attached[name] and not player:get_attach() and
 				(ctrl.up or ctrl.down or ctrl.left or ctrl.right or ctrl.jump) then
 					ts_furniture.up(nil, nil, player)
 				end
@@ -237,11 +237,13 @@ function ts_furniture.register_furniture(recipe, description, tiles)
 	end
 end
 
-ts_furniture.register_furniture("default:aspen_wood", "Aspen")
-ts_furniture.register_furniture("default:pine_wood", "Pine")
-ts_furniture.register_furniture("default:acacia_wood", "Acacia")
-ts_furniture.register_furniture("default:wood", "Wooden")
-ts_furniture.register_furniture("default:junglewood", "Jungle Wood")
+if minetest.get_modpath("default") then
+	ts_furniture.register_furniture("default:aspen_wood", "Aspen")
+	ts_furniture.register_furniture("default:pine_wood", "Pine")
+	ts_furniture.register_furniture("default:acacia_wood", "Acacia")
+	ts_furniture.register_furniture("default:wood", "Wooden")
+	ts_furniture.register_furniture("default:junglewood", "Jungle Wood")
+end
 
 if (minetest.get_modpath("moretrees")) then
 	ts_furniture.register_furniture("moretrees:apple_tree_planks", "Apple Tree")
