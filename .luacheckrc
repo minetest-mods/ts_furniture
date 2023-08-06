@@ -34,6 +34,8 @@ stds.spawnit = {
 		player_api = {fields = {"player_attached"}},
 	},
 	read_globals = {
+	    "more_player_monoids",
 	    "player_api",
+	    "player_monoids",
 	},
 }
