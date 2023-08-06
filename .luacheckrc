@@ -31,6 +31,7 @@ stds.minetest = {
 stds.spawnit = {
 	globals = {
 		"ts_furniture",
+		player_api = {fields = {"player_attached"}},
 	},
 	read_globals = {
 	    "player_api",
