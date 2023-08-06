@@ -9,7 +9,7 @@ ts_furniture.kneeling_bench = minetest.settings:get_bool("ts_furniture.kneeling_
 local S = minetest.get_translator("ts_furniture")
 
 -- Get texture by node name
-local T = function (node_name)
+local get_tiles = function (node_name)
 	local def = minetest.registered_nodes[node_name]
 	if not (def and def.tiles) then
 		return ""
@@ -189,12 +189,12 @@ local ignore_groups = {
 	["tree"] = true
 }
 
-function ts_furniture.register_furniture(recipe, description, tiles)
+function ts_furniture.register_furniture(recipe_item, description, tiles)
 	if not tiles then
-		tiles = T(recipe)
+		tiles = get_tiles(recipe_item)
 	end
 
-	local recipe_def = minetest.registered_items[recipe]
+	local recipe_def = minetest.registered_items[recipe_item]
 	if not recipe_def then
 		return
 	end
@@ -207,7 +207,7 @@ function ts_furniture.register_furniture(recipe, description, tiles)
 	end
 
 	for furniture, def in pairs(furnitures) do
-		local node_name = "ts_furniture:" .. recipe:gsub(":", "_") .. "_" .. furniture
+		local node_name = "ts_furniture:" .. recipe_item:gsub(":", "_") .. "_" .. furniture
 
 		if def.sitting and ts_furniture.enable_sitting then
 			def.on_rightclick = ts_furniture.sit
@@ -232,7 +232,7 @@ function ts_furniture.register_furniture(recipe, description, tiles)
 
 		minetest.register_craft({
 			output = node_name,
-			recipe = def.craft(recipe)
+			recipe = def.craft(recipe_item)
 		})
 	end
 end
