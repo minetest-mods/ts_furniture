@@ -27,8 +27,14 @@ end
 -- Thomas S. modified it, so that it can be used in this mod
 if ts_furniture.enable_sitting then
 	ts_furniture.sit = function(pos, _, player)
+		if player:get_attach() then
+			minetest.chat_send_player(player:get_player_name(), "You cannot sit while attached to something.")
+			return
+		end
 		local name = player:get_player_name()
-		if not player_api.player_attached[name] then
+		if player_api.player_attached[name] then
+			ts_furniture.stand(player, name)
+		else
 			if vector.length(player:get_player_velocity()) > 0 then
 				minetest.chat_send_player(player:get_player_name(), 'You can only sit down when you are not moving.')
 				return
@@ -42,8 +48,6 @@ if ts_furniture.enable_sitting then
 					player_api.set_animation(player, "sit" , 30)
 				end
 			end)
-		else
-			ts_furniture.stand(player, name)
 		end
 	end
 
