@@ -1,4 +1,4 @@
-std = "lua51+luajit+minetest+spawnit"
+std = "lua51+luajit+minetest+ts_furniture"
 unused_args = false
 max_line_length = 120
 
@@ -28,7 +28,7 @@ stds.minetest = {
 	}
 }
 
-stds.spawnit = {
+stds.ts_furniture = {
 	globals = {
 		"ts_furniture",
 		player_api = {fields = {"player_attached"}},
