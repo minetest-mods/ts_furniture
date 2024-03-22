@@ -7,9 +7,13 @@ ts_furniture.kneeling_bench = minetest.settings:get_bool("ts_furniture.kneeling_
 
 -- Used for localization
 local S = minetest.get_translator("ts_furniture")
+local has_more_player_monoids = minetest.get_modpath("more_player_monoids")
+local has_player_monoids = minetest.get_modpath("player_monoids")
+
+local is_sitting_by_player_name = {}
 
 -- Get texture by node name
-local T = function (node_name)
+local get_tiles = function (node_name)
 	local def = minetest.registered_nodes[node_name]
 	if not (def and def.tiles) then
 		return ""
@@ -23,42 +27,86 @@ local T = function (node_name)
 	return ""
 end
 
+local function set_attached(player, value)
+	local player_name = player:get_player_name()
+	if value then
+		player:set_eye_offset({x = 0, y = -7, z = 2}, {x = 0, y = 0, z = 0})
+		if has_player_monoids then
+			player_monoids.speed:add_change(player, 0, "ts_furniture:sitting")
+			player_monoids.jump:add_change(player, 0, "ts_furniture:sitting")
+			player_monoids.gravity:add_change(player, 0, "ts_furniture:sitting")
+		else
+			local physics_override = player:get_physics_override()
+			physics_override.speed = 0
+			physics_override.jump = 0
+			physics_override.gravity = 0
+			player:set_physics_override(physics_override)
+		end
+		if has_more_player_monoids then
+			more_player_monoids.player_attached:add_change(player, true, "ts_furniture:sitting")
+		else
+			player_api.player_attached[player_name] = true
+		end
+	else
+		player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+		if has_player_monoids then
+			player_monoids.speed:del_change(player, "ts_furniture:sitting")
+			player_monoids.jump:del_change(player, "ts_furniture:sitting")
+			player_monoids.gravity:del_change(player, "ts_furniture:sitting")
+		else
+			local physics_override = player:get_physics_override()
+			physics_override.speed = 1
+			physics_override.jump = 1
+			physics_override.gravity = 1
+			player:set_physics_override(physics_override)
+		end
+		if has_more_player_monoids then
+			more_player_monoids.player_attached:del_change(player, "ts_furniture:sitting")
+		else
+			player_api.player_attached[player_name] = nil
+		end
+	end
+end
+
 -- The following code is from "Get Comfortable [cozy]" (by everamzah; published under WTFPL)
 -- Thomas S. modified it, so that it can be used in this mod
 if ts_furniture.enable_sitting then
 	ts_furniture.sit = function(pos, _, player)
-		local name = player:get_player_name()
-		if not player_api.player_attached[name] then
-			if vector.length(player:get_player_velocity()) > 0 then
-				minetest.chat_send_player(player:get_player_name(), 'You can only sit down when you are not moving.')
-				return
-			end
-			player:move_to(pos)
-			player:set_eye_offset({x = 0, y = -7, z = 2}, {x = 0, y = 0, z = 0})
-			player:set_physics_override(0, 0, 0)
-			player_api.player_attached[name] = true
-			minetest.after(0.1, function()
-				if player then
-					player_api.set_animation(player, "sit" , 30)
-				end
-			end)
-		else
-			ts_furniture.stand(player, name)
+		local player_name = player:get_player_name()
+		if is_sitting_by_player_name[player_name] then
+			ts_furniture.stand(player, player_name)
+			return
 		end
+		if player:get_attach() then
+			minetest.chat_send_player(player:get_player_name(), "You cannot sit while attached to something.")
+			return
+		end
+		if player:get_velocity():length() > 0 then
+			minetest.chat_send_player(player_name, 'You can only sit down when you are not moving.')
+			return
+		end
+		player:move_to(pos)
+		set_attached(player, true)
+		is_sitting_by_player_name[player_name] = true
+		minetest.after(0, function()
+			player = minetest.get_player_by_name(player_name)
+			if player then
+				player_api.set_animation(player, "sit" , 30)
+			end
+		end)
 	end
 
 	ts_furniture.up = function(_, _, player)
-		local name = player:get_player_name()
-		if player_api.player_attached[name] then
-			ts_furniture.stand(player, name)
-		end
+		ts_furniture.stand(player)
 	end
 
 	ts_furniture.stand = function(player, name)
-		player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
-		player:set_physics_override(1, 1, 1)
-		player_api.player_attached[name] = false
-		player_api.set_animation(player, "stand", 30)
+		local player_name = player:get_player_name()
+		if is_sitting_by_player_name[player_name] then
+			set_attached(player, false)
+			player_api.set_animation(player, "stand", 30)
+			is_sitting_by_player_name[player_name] = nil
+		end
 	end
 
 	-- The player will stand at the beginning of the movement
@@ -67,10 +115,10 @@ if ts_furniture.enable_sitting then
 			local players = minetest.get_connected_players()
 			for i = 1, #players do
 				local player = players[i]
-				local name = player:get_player_name()
+				local player_name = player:get_player_name()
 				local ctrl = player:get_player_control()
-				if default.player_attached[name] and not player:get_attach() and
-				(ctrl.up or ctrl.down or ctrl.left or ctrl.right or ctrl.jump) then
+				local is_moving = ctrl.up or ctrl.down or ctrl.left or ctrl.right or ctrl.jump
+				if is_sitting_by_player_name[player_name] and is_moving then
 					ts_furniture.up(nil, nil, player)
 				end
 			end
@@ -189,12 +237,12 @@ local ignore_groups = {
 	["tree"] = true
 }
 
-function ts_furniture.register_furniture(recipe, description, tiles)
+function ts_furniture.register_furniture(recipe_item, description, tiles)
 	if not tiles then
-		tiles = T(recipe)
+		tiles = get_tiles(recipe_item)
 	end
 
-	local recipe_def = minetest.registered_items[recipe]
+	local recipe_def = minetest.registered_items[recipe_item]
 	if not recipe_def then
 		return
 	end
@@ -207,7 +255,7 @@ function ts_furniture.register_furniture(recipe, description, tiles)
 	end
 
 	for furniture, def in pairs(furnitures) do
-		local node_name = "ts_furniture:" .. recipe:gsub(":", "_") .. "_" .. furniture
+		local node_name = "ts_furniture:" .. recipe_item:gsub(":", "_") .. "_" .. furniture
 
 		if def.sitting and ts_furniture.enable_sitting then
 			def.on_rightclick = ts_furniture.sit
@@ -232,16 +280,18 @@ function ts_furniture.register_furniture(recipe, description, tiles)
 
 		minetest.register_craft({
 			output = node_name,
-			recipe = def.craft(recipe)
+			recipe = def.craft(recipe_item)
 		})
 	end
 end
 
-ts_furniture.register_furniture("default:aspen_wood", "Aspen")
-ts_furniture.register_furniture("default:pine_wood", "Pine")
-ts_furniture.register_furniture("default:acacia_wood", "Acacia")
-ts_furniture.register_furniture("default:wood", "Wooden")
-ts_furniture.register_furniture("default:junglewood", "Jungle Wood")
+if minetest.get_modpath("default") then
+	ts_furniture.register_furniture("default:aspen_wood", "Aspen")
+	ts_furniture.register_furniture("default:pine_wood", "Pine")
+	ts_furniture.register_furniture("default:acacia_wood", "Acacia")
+	ts_furniture.register_furniture("default:wood", "Wooden")
+	ts_furniture.register_furniture("default:junglewood", "Jungle Wood")
+end
 
 if (minetest.get_modpath("moretrees")) then
 	ts_furniture.register_furniture("moretrees:apple_tree_planks", "Apple Tree")
