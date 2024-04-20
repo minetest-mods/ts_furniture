@@ -12,6 +12,10 @@ local has_player_monoids = minetest.get_modpath("player_monoids")
 
 local is_sitting_by_player_name = {}
 
+minetest.register_on_leaveplayer(function(player)
+	is_sitting_by_player_name[player:get_player_name()] = nil
+end)
+
 -- Get texture by node name
 local get_tiles = function (node_name)
 	local def = minetest.registered_nodes[node_name]
