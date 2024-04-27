@@ -223,10 +223,9 @@ function ts_furniture.register_furniture(recipe, description, tiles)
 			def.on_punch = ts_furniture.up
 		end
 		
-		local groups2=groups
+		local groups2 = table.copy(groups)
 		if def.bench then
-			groups2={ts_furniture_bench=1}
-			for k,v in pairs(groups) do groups2[k] = v end
+			groups2.ts_furniture_bench = 1
 		end
 		
 		minetest.register_node(":" .. node_name, {
