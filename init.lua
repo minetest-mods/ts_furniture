@@ -26,15 +26,26 @@ end
 -- The following code is from "Get Comfortable [cozy]" (by everamzah; published under WTFPL)
 -- Thomas S. modified it, so that it can be used in this mod
 if ts_furniture.enable_sitting then
-	ts_furniture.sit = function(pos, _, player)
+	ts_furniture.sit = function(pos, node, player)
 		local name = player:get_player_name()
 		if not player_api.player_attached[name] then
 			if vector.length(player:get_player_velocity()) > 0 then
 				minetest.chat_send_player(player:get_player_name(), 'You can only sit down when you are not moving.')
 				return
 			end
-			player:move_to(pos)
-			player:set_eye_offset({x = 0, y = -7, z = 2}, {x = 0, y = 0, z = 0})
+
+			if minetest.get_item_group(node.name, "ts_furniture_bench") == 1 then
+				
+				if
+				node.param2 == 0 then pos.z=pos.z+0.25 elseif
+				node.param2 == 2 then pos.z=pos.z-0.25 elseif
+				node.param2 == 1 then pos.x=pos.x+0.25 elseif
+				node.param2 == 3 then pos.x=pos.x-0.25
+				end
+				player:move_to(pos)
+			else
+				player:move_to(pos)
+			end
 			player:set_physics_override(0, 0, 0)
 			player_api.player_attached[name] = true
 			minetest.after(0.1, function()
@@ -55,7 +66,6 @@ if ts_furniture.enable_sitting then
 	end
 
 	ts_furniture.stand = function(player, name)
-		player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
 		player:set_physics_override(1, 1, 1)
 		player_api.player_attached[name] = false
 		player_api.set_animation(player, "stand", 30)
@@ -149,6 +159,7 @@ local furnitures = {
 	["bench"] = {
 		description = "Bench",
 		sitting = true,
+		bench = true,
 		nodebox = {
 			{ -0.5, -0.1, 0, 0.5, 0, 0.5 }, -- seating
 			{ -0.4, -0.5, 0, -0.3, -0.1, 0.5 }, -- foot 1
@@ -213,7 +224,13 @@ function ts_furniture.register_furniture(recipe, description, tiles)
 			def.on_rightclick = ts_furniture.sit
 			def.on_punch = ts_furniture.up
 		end
-
+		
+		local groups2=groups
+		if def.bench then
+			groups2={ts_furniture_bench=1,unpack(groups)}
+			for k,v in pairs(groups) do groups2[k] = v end
+		end
+		
 		minetest.register_node(":" .. node_name, {
 			description = S(description .. " " .. def.description),
 			drawtype = "nodebox",
@@ -221,7 +238,7 @@ function ts_furniture.register_furniture(recipe, description, tiles)
 			paramtype2 = "facedir",
 			sunlight_propagates = true,
 			tiles = { tiles },
-			groups = groups,
+			groups = groups2,
 			node_box = {
 				type = "fixed",
 				fixed = def.nodebox
