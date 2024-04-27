@@ -227,7 +227,7 @@ function ts_furniture.register_furniture(recipe, description, tiles)
 		
 		local groups2=groups
 		if def.bench then
-			groups2={ts_furniture_bench=1,unpack(groups)}
+			groups2={ts_furniture_bench=1}
 			for k,v in pairs(groups) do groups2[k] = v end
 		end
 		
