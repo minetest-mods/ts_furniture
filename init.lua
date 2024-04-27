@@ -42,10 +42,8 @@ if ts_furniture.enable_sitting then
 				node.param2 == 1 then pos.x=pos.x+0.25 elseif
 				node.param2 == 3 then pos.x=pos.x-0.25
 				end
-				player:move_to(pos)
-			else
-				player:move_to(pos)
 			end
+			player:move_to(pos)
 			player:set_physics_override(0, 0, 0)
 			player_api.player_attached[name] = true
 			minetest.after(0.1, function()
