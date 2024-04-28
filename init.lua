@@ -1,3 +1,4 @@
+local has_normal_eye_offset_behavior = (function() local ver = minetest.get_version().string; return ver ~= "5.7.0" and ver ~= "5.8.0" end)()
 ts_furniture = {}
 
 -- If true, you can sit on chairs and benches, when right-click them.
@@ -44,6 +45,10 @@ if ts_furniture.enable_sitting then
 				end
 			end
 			player:move_to(pos)
+			if has_normal_eye_offset_behavior then
+				player:set_eye_offset({x = 0, y = -7, z = 2}, {x = 0, y = 0, z = 0})
+			end
+			
 			player:set_physics_override(0, 0, 0)
 			player_api.player_attached[name] = true
 			minetest.after(0.1, function()
@@ -64,6 +69,9 @@ if ts_furniture.enable_sitting then
 	end
 
 	ts_furniture.stand = function(player, name)
+		if has_normal_eye_offset_behavior then
+			player:set_eye_offset({x = 0, y = 0, z = 0}, {x = 0, y = 0, z = 0})
+		end
 		player:set_physics_override(1, 1, 1)
 		player_api.player_attached[name] = false
 		player_api.set_animation(player, "stand", 30)
