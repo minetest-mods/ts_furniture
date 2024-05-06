@@ -51,7 +51,7 @@ if ts_furniture.enable_sitting then
 			minetest.after(0.1, function()
 				if player then
 					player_api.set_animation(player, "sit" , 30)
-					player:set_eye_offset({x = 0, y = 0.8 - player:get_properties().eye_height, z = 0}, {x = 0, y = 0, z = 0})
+					player:set_eye_offset({x = 0, y = (0.8 - player:get_properties().eye_height)*10, z = 0}, {x = 0, y = 0, z = 0})
 				end
 			end)
 		else
