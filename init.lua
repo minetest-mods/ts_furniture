@@ -30,7 +30,7 @@ if ts_furniture.enable_sitting then
 	ts_furniture.sit = function(pos, _, player)
 		local name = player:get_player_name()
 		if not player_api.player_attached[name] then
-			if vector.length(player:get_player_velocity()) > 0.5 then
+			if vector.length(player:get_velocity()) > 0.5 then
 				minetest.chat_send_player(player:get_player_name(), 'You can only sit down when you are not moving.')
 				return
 			end
